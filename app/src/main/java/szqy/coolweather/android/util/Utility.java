@@ -2,6 +2,8 @@ package szqy.coolweather.android.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
 import szqy.coolweather.android.db.City;
 import szqy.coolweather.android.db.County;
 import szqy.coolweather.android.db.Province;
+import szqy.coolweather.android.gson.Weather;
 
 /**
  * Created by 一非 on 2018/2/17.
@@ -73,6 +76,18 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
